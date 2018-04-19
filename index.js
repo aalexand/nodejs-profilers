@@ -30,9 +30,9 @@ function stopTimeProfiling(runName) {
 }
 
 async function collectTimeProfile(runName, durationMillis) {
-  profiler.startTimeProfiling(runName);
+  startTimeProfiling(runName);
   await delay(durationMillis);
-  profiler.stopTimeProfiling(runName);
+  stopTimeProfiling(runName);
  }
 
 module.exports = {
