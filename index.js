@@ -1,0 +1,38 @@
+const heapProfiler = require('bindings')('sampling_heap_profiler');
+const timeProfiler = require('bindings')('time_profiler');
+
+// heap profiler
+function startSamplingHeapProfiler(intervalBytes, stackDepth) {
+  heapProfiler.startSamplingHeapProfiler(intervalBytes, stackDepth);
+}
+
+function stopSamplingHeapProfiler() {
+  heapProfiler.stopSamplingHeapProfiler();
+}
+
+function getAllocationProfile() {
+  heapProfiler.getAllocationProfile();
+}
+
+
+// time profiler
+function setTimeSamplingInterval(intervalMicros) {
+  timeProfiler.setSamplingInterval(intervalMicros);
+}
+
+function startTimeProfiling(runName) {
+  timeProfiler.startProfiling(runName);
+}
+
+function stopTimeProfiling(runName) {
+  timeProfiler.stopProfiling(runName);
+}
+
+module.exports = {
+  startSamplingHeapProfiler: startSamplingHeapProfiler,
+  stopSamplingHeapProfiler: stopSamplingHeapProfiler,
+  setTimeSamplingInterval: setTimeSamplingInterval,
+  startTimeProfiling: startTimeProfiling,
+  stopTimeProfiling: stopTimeProfiling,
+  getAllocationProfile: getAllocationProfile
+}
