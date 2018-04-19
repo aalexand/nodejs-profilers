@@ -1,5 +1,6 @@
 const heapProfiler = require('bindings')('sampling_heap_profiler');
 const timeProfiler = require('bindings')('time_profiler');
+const delay = require('delay');
 
 // heap profiler
 function startSamplingHeapProfiler(intervalBytes, stackDepth) {
@@ -28,11 +29,18 @@ function stopTimeProfiling(runName) {
   timeProfiler.stopProfiling(runName);
 }
 
+async function collectTimeProfile(runName, durationMillis) {
+  profiler.startTimeProfiling(runName);
+  await delay(durationMillis);
+  profiler.stopTimeProfiling(runName);
+ }
+
 module.exports = {
   startSamplingHeapProfiler: startSamplingHeapProfiler,
   stopSamplingHeapProfiler: stopSamplingHeapProfiler,
   setTimeSamplingInterval: setTimeSamplingInterval,
   startTimeProfiling: startTimeProfiling,
   stopTimeProfiling: stopTimeProfiling,
-  getAllocationProfile: getAllocationProfile
+  getAllocationProfile: getAllocationProfile,
+  collectTimeProfile: collectTimeProfile
 }
