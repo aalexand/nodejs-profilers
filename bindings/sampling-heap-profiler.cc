@@ -20,39 +20,6 @@
 
 using namespace v8;
 
-Local<Value> TranslateAllocationProfile(AllocationProfile::Node* node) {
-  Local<Object> js_node = Nan::New<Object>();
-  js_node->Set(Nan::New<String>("name").ToLocalChecked(),
-    node->name);
-  js_node->Set(Nan::New<String>("scriptName").ToLocalChecked(),
-    node->script_name);
-  js_node->Set(Nan::New<String>("scriptId").ToLocalChecked(),
-    Nan::New<Integer>(node->script_id));
-  js_node->Set(Nan::New<String>("lineNumber").ToLocalChecked(),
-    Nan::New<Integer>(node->line_number));
-  js_node->Set(Nan::New<String>("columnNumber").ToLocalChecked(),
-    Nan::New<Integer>(node->column_number));
-  Local<Array> children = Nan::New<Array>(node->children.size());
-  for (size_t i = 0; i < node->children.size(); i++) {
-    children->Set(i, TranslateAllocationProfile(node->children[i]));
-  }
-  js_node->Set(Nan::New<String>("children").ToLocalChecked(),
-    children);
-  Local<Array> allocations = Nan::New<Array>(node->allocations.size());
-  for (size_t i = 0; i < node->allocations.size(); i++) {
-    AllocationProfile::Allocation alloc = node->allocations[i];
-    Local<Object> js_alloc = Nan::New<Object>();
-    js_alloc->Set(Nan::New<String>("sizeBytes").ToLocalChecked(),
-      Nan::New<Number>(alloc.size));
-    js_alloc->Set(Nan::New<String>("count").ToLocalChecked(),
-      Nan::New<Number>(alloc.count));
-    allocations->Set(i, js_alloc);
-  }
-  js_node->Set(Nan::New<String>("allocations").ToLocalChecked(),
-    allocations);
-  return js_node;
-}
-
 NAN_METHOD(StartSamplingHeapProfiler) {
   if (info.Length() == 2) {
     if (!info[0]->IsUint32()) {
@@ -77,8 +44,6 @@ NAN_METHOD(StopSamplingHeapProfiler) {
 NAN_METHOD(GetAllocationProfile) {
   std::unique_ptr<v8::AllocationProfile> profile(
     info.GetIsolate()->GetHeapProfiler()->GetAllocationProfile());
-  AllocationProfile::Node* root = profile->GetRootNode();
-  info.GetReturnValue().Set(TranslateAllocationProfile(root));
 }
 
 NAN_MODULE_INIT(InitAll) {
