@@ -33,7 +33,7 @@ async function collectTimeProfile(runName, durationMillis) {
   startTimeProfiling(runName);
   await delay(durationMillis);
   stopTimeProfiling(runName);
- }
+}
 
 module.exports = {
   startSamplingHeapProfiler: startSamplingHeapProfiler,
@@ -41,6 +41,6 @@ module.exports = {
   setTimeSamplingInterval: setTimeSamplingInterval,
   startTimeProfiling: startTimeProfiling,
   stopTimeProfiling: stopTimeProfiling,
-  getAllocationProfile: getAllocationProfile,
-  collectTimeProfile: collectTimeProfile
+  collectTimeProfile: collectTimeProfile,
+  getAllocationProfile: getAllocationProfile
 }
